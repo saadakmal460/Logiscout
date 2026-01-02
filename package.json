@@ -1,0 +1,56 @@
+{
+  "name": "logiscout",
+  "version": "1.0.0",
+  "description": "Logiscout — a structured logger library",
+  "type": "module",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs && npm run rename:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "rename:cjs": "node scripts/rename-cjs.cjs",
+    "start": "ts-node test/test.ts"
+  },
+  "keywords": [
+    "logger",
+    "logging",
+    "correlation-id",
+    "async-context",
+    "structured-logging",
+    "nodejs",
+    "express",
+    "winston"
+  ],
+  "author": "YOUR_NAME",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_GITHUB_USERNAME/logicout"
+  },
+  "homepage": "https://github.com/YOUR_GITHUB_USERNAME/logicout#readme",
+  "bugs": {
+    "url": "https://github.com/YOUR_GITHUB_USERNAME/logicout/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.0"
+  }
+}
