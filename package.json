@@ -26,22 +26,18 @@
   "keywords": [
     "logger",
     "logging",
-    "correlation-id",
-    "async-context",
     "structured-logging",
-    "nodejs",
-    "express",
-    "winston"
+    "nodejs"
   ],
-  "author": "YOUR_NAME",
+  "author": "Logiscout",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_GITHUB_USERNAME/logicout"
+    "url": "https://github.com/saadakmal460/Logiscout.git"
   },
-  "homepage": "https://github.com/YOUR_GITHUB_USERNAME/logicout#readme",
+  "homepage": "https://github.com/saadakmal460/Logiscout#readme",
   "bugs": {
-    "url": "https://github.com/YOUR_GITHUB_USERNAME/logicout/issues"
+    "url": "https://github.com/saadakmal460/Logiscout/issues"
   },
   "engines": {
     "node": ">=18"

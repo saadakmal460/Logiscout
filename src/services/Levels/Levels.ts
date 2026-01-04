@@ -11,7 +11,6 @@ export class Levels extends Logger implements LoggerInterface{
 
   warn(message: string, meta?: Record<string, unknown>): void {
     const entry:LogEntry = this.getLogEntry(message , LogLevels.WARN , meta)
-    
     this.log(entry);
   }
 
@@ -24,4 +23,10 @@ export class Levels extends Logger implements LoggerInterface{
     const entry:LogEntry = this.getLogEntry(message , LogLevels.DEBUG , meta)
     this.log(entry);
   }
+
+  critical(message: string, meta?: Record<string, unknown>): void {
+    const entry:LogEntry = this.getLogEntry(message , LogLevels.CRITICAL , meta)
+    this.log(entry);
+  }
+
 }
