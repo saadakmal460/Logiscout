@@ -4,7 +4,6 @@ export { LogEntry } from "./core/types/LogEntry.js";
 export { Levels } from "./services/Levels/Levels.js";
 export { Logger as BaseLogger } from "./services/Logger/Logger.js";
 
-
 import { Levels } from "./services/Levels/Levels.js";
 
 // const Logger = new Levels();
