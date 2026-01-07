@@ -6,4 +6,5 @@ export interface LogEntry {
   timestamp: string;
   level: LogLevels;
   correlationId?: string;
+  send?:boolean
 }

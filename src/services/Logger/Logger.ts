@@ -5,12 +5,16 @@ import { LogContext } from "../../core/types/LogContext.js";
 import { LogApi } from "../../api/LogApi.js";
 import { LogLevels } from "../../core/enum/LogLevels.js";
 import { RequestContext } from "../../core/context/RequestContext.js";
+import { LogiscoutConfig } from "../../initiator/state.js";
+import { StructLogFormatter } from "../../formatters/StructLogFormatter.js";
 
 export abstract class Logger {
   protected winstonLogger: WinstonLogger;
   private componentName: string;
+  private projectName:string;
+  private environment:string;
 
-  constructor(componentName: string) {
+  constructor(componentName: string , config:LogiscoutConfig) {
     // Validate component name
     if (!componentName || typeof componentName !== "string") {
       throw new Error(
@@ -27,8 +31,13 @@ export abstract class Logger {
     }
 
     this.componentName = componentName;
+    this.projectName = config.projectName;
+    this.environment = config.environment
 
     try {
+      // Create structlog-style formatter instance
+      const structLogFormatter = new StructLogFormatter();
+
       this.winstonLogger = winston.createLogger({
         level: "debug",
         levels: {
@@ -37,33 +46,34 @@ export abstract class Logger {
           info: 2,
           debug: 3,
         },
+        // File transport format (non-colorized)
         format: format.combine(
           format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-          format.printf(
-            ({
-              timestamp,
-              level,
-              message,
-              component,
-              correlationId,
-              ...meta
-            }) => {
-              const metaString =
-                Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : "";
-
-              return `[${component}] [${timestamp}] [${level.toUpperCase()}] [${correlationId}] ${message}${metaString}`;
-            }
-          )
+          format.printf(({ timestamp, level, message, component, ...meta }) => {
+            const formatted = structLogFormatter.format({
+              level: level as LogLevels,
+              message: String(message),
+              timestamp: String(timestamp),
+              component: component as string | undefined,
+              ...meta,
+            });
+            return `[${config.projectName}] ${formatted}`;
+          })
         ),
         transports: [
           new transports.Console({
+            // Console transport with structlog-style formatting and colors
             format: format.combine(
-              format.colorize({ all: true }),
               format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-              format.printf(({ timestamp, level, message, ...meta }) => {
-                const metaString =
-                  Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : "";
-                return `[${componentName}] [${timestamp}] [${level}] ${message}${metaString}`;
+              format.printf(({ timestamp, level, message, component, ...meta }) => {
+                const formatted = structLogFormatter.format({
+                  level: level as LogLevels,
+                  message: String(message),
+                  timestamp: String(timestamp),
+                  component: component as string | undefined,
+                  ...meta,
+                });
+                return formatted;
               })
             ),
           }),
@@ -110,6 +120,7 @@ export abstract class Logger {
           correlationId,
           ...entry.meta,
         };
+
       } catch (metaError) {
         console.error(
           "[Logiscout] Error: Failed to process metadata. Logging without metadata.",
@@ -123,15 +134,21 @@ export abstract class Logger {
       }
 
       this.winstonLogger.log(entry.level, entry.message, logMeta);
-
-      // Send structured log to API (no formatting)
-      // LogApi({
-      //   logs: {
-      //     ...entry,
-      //     component: this.componentName,
-      //     correlationId,
-      //   },
-      // });
+      console.log("entry: " , entry.send , this.environment)
+      if(entry.send && this.environment == "prod"){
+        console.log("sending to he server")
+        // Send structured log to API (no formatting)
+        // LogApi({
+        //   logs: {
+        //     ...entry,
+        //     component: this.componentName,
+        //     correlationId,
+        //   },
+        // });
+      }else{
+        console.log("Showed to the user")
+      }
+      
     } catch (error) {
       // Silent failure - logger should never crash the application
       // Log to console as last resort
@@ -170,6 +187,7 @@ export abstract class Logger {
       meta,
       timestamp: new Date().toISOString(),
       level: logLevel,
+      send:true
     };
     return entry;
   }

@@ -1,5 +1,6 @@
 import { RequestContext } from "../core/context/RequestContext.js";
 import crypto from "crypto";
+import { getLogiScouConfig } from "../initiator/state.js";
 
 interface RequestLike {
   headers?: Record<string, string | string[] | undefined>;
@@ -22,6 +23,7 @@ interface MiddlewareHandler {
 export const createCorrelationMiddleware = (): MiddlewareHandler => {
   return (req: RequestLike, res: ResponseLike, next: NextFunction): void => {
     // Validate request object
+    const { projectName, environment } = getLogiScouConfig(); // 🔒 guard
     if (!req || typeof req !== "object") {
       console.error(
         "[CorrelationMiddleware] Error: Invalid request object. " +
