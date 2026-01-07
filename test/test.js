@@ -9,8 +9,8 @@
 // Logger.warn("Cache miss detected");
 // Logger.error("Critical error occurred");
 // Logger.debug("Variable state check");
-import { createLogger } from "../src/index";
-import { RequestContext } from "../src/core/context/RequestContext";
+import { createLogger } from "../src/index.js";
+import { RequestContext } from "../src/core/context/RequestContext.js";
 const Logger = createLogger("UserController");
 RequestContext.run(() => {
     Logger.info("Controller layer");

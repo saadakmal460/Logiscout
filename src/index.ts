@@ -3,7 +3,6 @@ export { LoggerInterface } from "./core/interface/LoggerInterface.js";
 export { LogEntry } from "./core/types/LogEntry.js";
 export { Levels } from "./services/Levels/Levels.js";
 export { Logger as BaseLogger } from "./services/Logger/Logger.js";
-export { StructLogFormatter, LogEventData } from "./formatters/StructLogFormatter.js";
 import { getLogiScouConfig } from "./initiator/state.js";
 import { Levels } from "./services/Levels/Levels.js";
 

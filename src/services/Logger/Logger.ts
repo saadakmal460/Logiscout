@@ -6,7 +6,8 @@ import { LogApi } from "../../api/LogApi.js";
 import { LogLevels } from "../../core/enum/LogLevels.js";
 import { RequestContext } from "../../core/context/RequestContext.js";
 import { LogiscoutConfig } from "../../initiator/state.js";
-import { StructLogFormatter } from "../../formatters/StructLogFormatter.js";
+import { ConsoleFormatter } from "../formatters/ConsoleFormatter.js";
+
 
 export abstract class Logger {
   protected winstonLogger: WinstonLogger;
@@ -36,7 +37,7 @@ export abstract class Logger {
 
     try {
       // Create structlog-style formatter instance
-      const structLogFormatter = new StructLogFormatter();
+      const consoleFormatter = new ConsoleFormatter();
 
       this.winstonLogger = winston.createLogger({
         level: "debug",
@@ -50,7 +51,7 @@ export abstract class Logger {
         format: format.combine(
           format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
           format.printf(({ timestamp, level, message, component, ...meta }) => {
-            const formatted = structLogFormatter.format({
+            const formatted = consoleFormatter.format({
               level: level as LogLevels,
               message: String(message),
               timestamp: String(timestamp),
@@ -66,7 +67,7 @@ export abstract class Logger {
             format: format.combine(
               format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
               format.printf(({ timestamp, level, message, component, ...meta }) => {
-                const formatted = structLogFormatter.format({
+                const formatted = consoleFormatter.format({
                   level: level as LogLevels,
                   message: String(message),
                   timestamp: String(timestamp),
@@ -134,9 +135,8 @@ export abstract class Logger {
       }
 
       this.winstonLogger.log(entry.level, entry.message, logMeta);
-      console.log("entry: " , entry.send , this.environment)
       if(entry.send && this.environment == "prod"){
-        console.log("sending to he server")
+        // console.log("sending to he server")
         // Send structured log to API (no formatting)
         // LogApi({
         //   logs: {
@@ -146,7 +146,7 @@ export abstract class Logger {
         //   },
         // });
       }else{
-        console.log("Showed to the user")
+        // console.log("Showed to the user")
       }
       
     } catch (error) {

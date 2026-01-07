@@ -1,4 +1,4 @@
-import {createLogger, initLogiscout} from "../src/index.ts"
+import {createLogger, initLogiscout} from "../dist/esm/index.js"
 
 
 /**
@@ -6,7 +6,7 @@ import {createLogger, initLogiscout} from "../src/index.ts"
  */
 initLogiscout({
   projectName: "logiscout-test",
-  environment: "development",
+  environment: "prod",
   apiKey: "test-api-key",
 });
 
