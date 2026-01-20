@@ -9,7 +9,7 @@ const storage = new AsyncLocalStorage<RequestContextData>();
 
 export class RequestContext {
   static run(fn: () => void, correlationId?: string): void {
-    // Validate function parameter
+
     if (typeof fn !== "function") {
       throw new Error(
         "RequestContext.run() requires a function as the first parameter. " +

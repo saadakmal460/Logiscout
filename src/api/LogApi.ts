@@ -1,13 +1,16 @@
+import {
+  BackendLogPayload,
+  FrontendLogPayload,
+} from "../core/interface/payloads/Payloads.js";
+
+
 import HTTP from "./Interceptor.js";
 
-interface LogPayload {
-  logs: unknown;
-}
-
+type LogPayload = BackendLogPayload | FrontendLogPayload;
 export async function LogApi(data: LogPayload): Promise<void> {
   try {
-    const response = await HTTP.post("/log", data);
-    console.log("Log sent successfully:", response.status);
+    console.log(data);
+    // const response = await HTTP.post("/log", data);
   } catch (error) {
     console.error("Failed to send log:", error);
   }

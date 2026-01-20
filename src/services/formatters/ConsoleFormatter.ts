@@ -1,16 +1,8 @@
+import { LEVEL_COLORS } from "../../core/constants/Levels/LevelsColors.js";
 import { LogLevels } from "../../core/enum/LogLevels.js";
 
 
-const LEVEL_COLORS: Record<LogLevels, string> = {
-  [LogLevels.DEBUG]: "\x1b[90m",   // gray
-  [LogLevels.INFO]: "\x1b[32m",    // green
-  [LogLevels.WARN]: "\x1b[33m",    // yellow
-  [LogLevels.ERROR]: "\x1b[31m",   // red
-  [LogLevels.CRITICAL]: "\x1b[35m" // magenta
-};
-
 const RESET = "\x1b[0m";
-
 export class ConsoleFormatter {
   format(data: {
     level: LogLevels;
