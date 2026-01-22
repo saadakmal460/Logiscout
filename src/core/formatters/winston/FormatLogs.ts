@@ -1,6 +1,6 @@
 import winston, { Logger as WinstonLogger, format, transports } from "winston";
-import { ConsoleFormatter } from "../../../services/formatters/ConsoleFormatter";
-import { LogLevels } from "../../enum/LogLevels";
+import { ConsoleFormatter } from "../../../services/formatters/ConsoleFormatter.js";
+import { LogLevels } from "../../enum/LogLevels.js";
 
 const consoleFormatter = new ConsoleFormatter();
 export default function formatLogs() {

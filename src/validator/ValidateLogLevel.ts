@@ -1,5 +1,5 @@
-import { LogLevels } from "../core/enum/LogLevels";
-import { throwError } from "../errors/ThrowError";
+import { LogLevels } from "../core/enum/LogLevels.js";
+import { throwError } from "../errors/ThrowError.js";
 
 export default function validateLogLevel(logLevel: any): void {
   if (!Object.values(LogLevels).includes(logLevel)) {

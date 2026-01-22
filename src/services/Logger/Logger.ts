@@ -1,31 +1,26 @@
 import winston, { Logger as WinstonLogger, format, transports } from "winston";
-import { LoggerInterface } from "../../core/interface/LoggerInterface.js";
 import { LogEntry } from "../../core/types/LogEntry.js";
-import { LogContext } from "../../core/types/LogContext.js";
-import { LogApi } from "../../api/LogApi.js";
 import { LogLevels } from "../../core/enum/LogLevels.js";
 import { RequestContext } from "../../core/context/RequestContext.js";
 import { LogiscoutConfig } from "../../initiator/state.js";
-import { ConsoleFormatter } from "../formatters/ConsoleFormatter.js";
-import { getOrCreateSession } from "../../core/store/CorrelationStore.js";
-import {
-  sendfrontendLogApi,
-  sendSingleLogsApi,
-  sendToLogApi,
-} from "../../transporter/ServerTransporter.js";
-import consoleTranspoter from "../../transporter/ConsoleTranspoter.js";
+import { ConsoleTransporter } from "../transporter/ConsoleTranspoter.js";
 import { LOG_LEVEL_SEVERITY } from "../../core/constants/Levels/LevelsSeverity.js";
 import validateComponentName from "../../validator/ValidateComponentName.js";
 import { throwError } from "../../errors/ThrowError.js";
 import validateLogEntry from "../../validator/ValidateLogEntry.js";
 import validateLogMessage from "../../validator/ValidateLogMessage.js";
 import validateLogLevel from "../../validator/ValidateLogLevel.js";
+import { Jsonizer } from "../processors/Jsonizer.js";
+import { ServerTransporter } from "../transporter/ServerTransporter.js";
 
 export abstract class Logger {
   protected winstonLogger: WinstonLogger;
   private componentName: string;
   private projectName: string;
   private environment: string;
+  private readonly jsonizer: Jsonizer;
+  private readonly serverTransporter:ServerTransporter;
+  private readonly consoleTransporter:ConsoleTransporter
 
   constructor(componentName: string, config: LogiscoutConfig) {
     validateComponentName(componentName);
@@ -33,12 +28,19 @@ export abstract class Logger {
     this.componentName = componentName;
     this.projectName = config.projectName;
     this.environment = config.environment;
+    this.jsonizer = new Jsonizer({
+      projectName: this.projectName,
+      environment: this.environment,
+      componentName: this.componentName,
+    });
+    this.serverTransporter = new ServerTransporter()
+    this.consoleTransporter = new ConsoleTransporter()
 
     try {
       this.winstonLogger = winston.createLogger({
         level: LogLevels.DEBUG,
         levels: LOG_LEVEL_SEVERITY,
-        transports: [consoleTranspoter()],
+        transports: [this.consoleTransporter.transport()],
       });
     } catch (error) {
       throwError(
@@ -54,8 +56,7 @@ export abstract class Logger {
       // Validate log entry
       validateLogEntry(entry);
 
-      const correlationId =
-        RequestContext.getCorrelationId() ?? "no-correlation-id";
+      const correlationId = RequestContext.getCorrelationId() ?? "no-correlation-id";
 
       let logMeta: Record<string, unknown> = {
         component: this.componentName,
@@ -65,45 +66,23 @@ export abstract class Logger {
 
       this.winstonLogger.log(entry.level, entry.message, logMeta);
 
-      const session = getOrCreateSession(correlationId, {
-        projectName: this.projectName,
-        environment: this.environment,
-        correlationId,
-        component: this.componentName,
-      });
-
-      session.logs.push({
+      this.jsonizer.appendLog(correlationId, {
         timestamp: new Date().toISOString(),
         level: entry.level,
         message: entry.message,
         meta: logMeta,
-        component: this.componentName,
       });
 
       const logs = {
         ...entry,
-        component: this.componentName,
         projectName: this.projectName,
+        component: this.componentName,
         correlationId,
       };
 
-      if (correlationId == "no-correlation-id") {
-        // const payload = session.endSession()
-        sendSingleLogsApi(logs);
-      }
-
       if (entry.send && this.environment == "prod") {
         // console.log("sending to he server")
-        // Send structured log to API (no formatting)
-        // LogApi({
-        //   logs: {
-        //     ...entry,
-        //     component: this.componentName,
-        //     correlationId,
-        //   },
-        // });
-      } else {
-        // console.log("Showed to the user")
+        this.serverTransporter.transport(logs);
       }
     } catch (error) {
       const errorMessage =
@@ -122,6 +101,7 @@ export abstract class Logger {
     message: string,
     logLevel: LogLevels,
     meta?: Record<string, unknown>,
+    options?: { send?: boolean }
   ): LogEntry {
     // Validate message
     validateLogMessage(message)
@@ -134,7 +114,7 @@ export abstract class Logger {
       meta,
       timestamp: new Date().toISOString(),
       level: logLevel,
-      send: true,
+      send:options?.send ?? true,
     };
     return entry;
   }

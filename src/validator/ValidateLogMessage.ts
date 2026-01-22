@@ -1,5 +1,4 @@
-import { LogEntry } from "../core/types/LogEntry";
-import { throwError } from "../errors/ThrowError";
+import { throwError } from "../errors/ThrowError.js";
 
 export default function validateLogMessage(message: string): void {
   if (!message || typeof message !== "string") {

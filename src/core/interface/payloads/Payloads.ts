@@ -1,5 +1,5 @@
-import { LogPayloadType } from "../../enum/LogPayLoads";
-import { CorrelationSession, forntendSession } from "../CorrelationSession";
+import { LogPayloadType } from "../../enum/LogPayLoads.js";
+import { CorrelationSession, NonCorrelationSession } from "../CorrelationSession.js";
 
 export interface BackendLogPayload {
   type: LogPayloadType.SESSION;
@@ -8,5 +8,5 @@ export interface BackendLogPayload {
 
 export interface FrontendLogPayload {
   type: LogPayloadType.SINGLE;
-  data: forntendSession;
+  data: NonCorrelationSession;
 }

@@ -1,4 +1,4 @@
-import { throwError } from "../errors/ThrowError";
+import { throwError } from "../errors/ThrowError.js";
 
 
 export default function validateComponentName(componentName:string){

@@ -1,5 +1,5 @@
-import { LogEntry } from "../core/types/LogEntry";
-import { throwError } from "../errors/ThrowError";
+import { LogEntry } from "../core/types/LogEntry.js";
+import { throwError } from "../errors/ThrowError.js";
 
 export default function validateLogEntry(entry: LogEntry): void {
   if (!entry) {

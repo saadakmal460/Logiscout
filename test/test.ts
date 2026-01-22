@@ -19,6 +19,6 @@ const logger = createLogger("TestService");
  * STEP 3: Log without correlation context
  */
 console.log("\n--- Log without correlation context ---");
-logger.info("Log without correlation ID");
+logger.info("Log without correlation ID" ,{meta:"KEY"}, { send: false });
 logger.warn("Warn without correlation ID");
 

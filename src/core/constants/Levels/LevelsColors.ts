@@ -1,4 +1,4 @@
-import { LogLevels } from "../../enum/LogLevels";
+import { LogLevels } from "../../enum/LogLevels.js";
 
 export const LEVEL_COLORS: Record<LogLevels, string> = {
   [LogLevels.DEBUG]: "\x1b[90m",   // gray

@@ -1,35 +1,17 @@
 import { AsyncLocalStorage } from "async_hooks";
 import { randomUUID } from "crypto";
+import { throwError } from "../../errors/ThrowError.js";
+import { validateRequestContext } from "../../validator/ValidateRequestContext.js";
+import { RequestContextData } from "../interface/RequestContext.js";
 
-export interface RequestContextData {
-  correlationId: string;
-}
+
 
 const storage = new AsyncLocalStorage<RequestContextData>();
 
 export class RequestContext {
   static run(fn: () => void, correlationId?: string): void {
 
-    if (typeof fn !== "function") {
-      throw new Error(
-        "RequestContext.run() requires a function as the first parameter. " +
-        "Usage: RequestContext.run(() => { ... }, correlationId?)"
-      );
-    }
-
-    // Validate correlationId if provided
-    if (correlationId !== undefined && typeof correlationId !== "string") {
-      throw new Error(
-        "RequestContext.run(): correlationId must be a string if provided. " +
-        `Received: ${typeof correlationId}`
-      );
-    }
-
-    if (correlationId && correlationId.length > 100) {
-      throw new Error(
-        "RequestContext.run(): correlationId cannot exceed 100 characters."
-      );
-    }
+    validateRequestContext(fn , correlationId)
 
     // Generate UUID if not provided
     const id = correlationId ?? randomUUID();
@@ -42,7 +24,7 @@ export class RequestContext {
         fn
       );
     } catch (error) {
-      throw new Error(
+      throwError(
         `RequestContext.run(): Failed to run function in context. ${
           error instanceof Error ? error.message : "Unknown error"
         }`

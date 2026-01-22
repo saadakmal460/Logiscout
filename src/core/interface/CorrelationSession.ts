@@ -25,11 +25,12 @@ export interface CorrelationSession {
   }>;
 }
 
-export interface forntendSession {
+export interface NonCorrelationSession {
   projectName: string;
   timestamp: string;
   level: LogLevels;
   message: string;
   meta?: Record<string, unknown>;
   component: string;
+  correlationId?:string
 }

@@ -5,7 +5,10 @@ import {
   removeSession,
 } from "../core/store/CorrelationStore.js";
 import { getLogiScouConfig } from "../initiator/state.js";
-import { sendToLogApi } from "../transporter/ServerTransporter.js";
+import { ServerTransporter } from "../services/transporter/ServerTransporter.js";
+
+
+const serverTransporter = new ServerTransporter()
 
 export function createCorrelationMiddleware() {
   return (req: any, res: any, next: any) => {
@@ -32,7 +35,7 @@ export function createCorrelationMiddleware() {
 
         const payload = endSession(correlationId);
 
-        if (payload) sendToLogApi(payload);
+        if (payload) serverTransporter.transport(payload);
 
         removeSession(correlationId);
       });

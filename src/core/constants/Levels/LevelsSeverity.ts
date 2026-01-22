@@ -1,4 +1,4 @@
-import { LogLevels } from "../../enum/LogLevels";
+import { LogLevels } from "../../enum/LogLevels.js";
 
 
 export const LOG_LEVEL_SEVERITY: Record<LogLevels, number> = {
