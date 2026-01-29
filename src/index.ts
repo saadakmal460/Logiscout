@@ -21,6 +21,6 @@ export const createLogger = (component: string) => {
   });
 };
 
-export { createCorrelationMiddleware } from "./middlewares/correlationMiddleware.js";
+export { createCorrelationMiddleware } from "./middlewares/CorrelationMiddleware.js";
 
 // export { Logger };
