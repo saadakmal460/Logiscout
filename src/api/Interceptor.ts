@@ -8,11 +8,11 @@ let IMAGE_BASE_URL = "";
 let APP_URL = "";
 
 if (environment === "local") {
-  APP_URL = "https://practice-backend-new.thedoclinq.com/api/";
+  APP_URL = "http://localhost:3000/";
 } else if (environment === "prod") {
   APP_URL = "https://practicebackend-uat.thedoclinq.com/api/";
 } else{
-  APP_URL = "http://127.0.0.1:8000/logs/"
+  APP_URL = "http://localhost:3000/"
 }
 
 export { IMAGE_BASE_URL, APP_URL };

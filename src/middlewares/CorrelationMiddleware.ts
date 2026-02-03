@@ -42,8 +42,8 @@ export function createCorrelationMiddleware() {
         if (!payload) return;
 
         requestLogger.end(
-          req.method,
-          req.originalUrl || req.url,
+          request.method,
+          request.path,
           res.statusCode,
           payload.durationMs!,
         );
