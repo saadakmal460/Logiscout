@@ -62,9 +62,16 @@ export abstract class Logger {
         component: this.componentName,
         correlationId,
         ...(entry.meta ?? {}),
+        exception: entry.exception
       };
 
-      this.winstonLogger.log(entry.level, entry.message, logMeta);
+      let consoleMeta: Record<string, unknown> = {
+        component: this.componentName,
+        ...(entry.meta ?? {}),
+        exception: entry.exception
+      };
+
+      this.winstonLogger.log(entry.level, entry.message, consoleMeta);
 
       this.jsonizer.appendLog(correlationId, {
         timestamp: new Date().toISOString(),

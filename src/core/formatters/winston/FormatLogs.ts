@@ -1,4 +1,4 @@
-import winston, { Logger as WinstonLogger, format, transports } from "winston";
+import winston, { Logger as WinstonLogger, exceptions, format, transports } from "winston";
 import { ConsoleFormatter } from "../../../services/formatters/ConsoleFormatter.js";
 import { LogLevels } from "../../enum/LogLevels.js";
 
@@ -6,13 +6,14 @@ const consoleFormatter = new ConsoleFormatter();
 export default function formatLogs() {
     return format.combine(
       format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-      format.printf(({ timestamp, level, message, component, ...meta }) => {
+      format.printf(({ timestamp, level, message, component, exception, ...meta}) => {
         const formatted = consoleFormatter.format({
           level: level as LogLevels,
           message: String(message),
           timestamp: String(timestamp),
           component: component as string | undefined,
-          ...meta,
+          meta,
+          exception
         });
         return formatted;
       }),
