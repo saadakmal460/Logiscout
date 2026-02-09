@@ -1,4 +1,4 @@
-import winston, { Logger as WinstonLogger, format, transports } from "winston";
+import winston, { Logger as WinstonLogger, exceptions, format, transports } from "winston";
 import { LogEntry } from "../../core/types/LogEntry.js";
 import { LogLevels } from "../../core/enum/LogLevels.js";
 import { RequestContext } from "../../core/context/RequestContext.js";
@@ -11,7 +11,7 @@ import validateLogEntry from "../../validator/ValidateLogEntry.js";
 import validateLogMessage from "../../validator/ValidateLogMessage.js";
 import validateLogLevel from "../../validator/ValidateLogLevel.js";
 import { Jsonizer } from "../processors/Jsonizer.js";
-import { ServerTransporter } from "../transporter/ServerTransporter.js";
+import { serverTransporter } from "../transporter/ServerTransporter.js";
 
 export abstract class Logger {
   protected winstonLogger: WinstonLogger;
@@ -19,7 +19,6 @@ export abstract class Logger {
   private projectName: string;
   private environment: string;
   private readonly jsonizer: Jsonizer;
-  private readonly serverTransporter:ServerTransporter;
   private readonly consoleTransporter:ConsoleTransporter
 
   constructor(componentName: string, config: LogiscoutConfig) {
@@ -33,7 +32,7 @@ export abstract class Logger {
       environment: this.environment,
       componentName: this.componentName,
     });
-    this.serverTransporter = new ServerTransporter()
+    // this.serverTransporter = new ServerTransporter()
     this.consoleTransporter = new ConsoleTransporter()
 
     try {
@@ -78,6 +77,7 @@ export abstract class Logger {
         level: entry.level,
         message: entry.message,
         meta: logMeta,
+        exception:entry.exception
       });
 
       const logs = {
@@ -85,11 +85,12 @@ export abstract class Logger {
         projectName: this.projectName,
         component: this.componentName,
         correlationId,
+        exception:entry.exception
       };
 
-      if (entry.send && this.environment == "prod") {
+      if (entry.send && this.environment == "prod" && correlationId=="no-correlation-id") {
         // console.log("sending to he server")
-        this.serverTransporter.transport(logs);
+        serverTransporter.transport(logs);
       }
     } catch (error) {
       const errorMessage =

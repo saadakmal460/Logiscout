@@ -23,9 +23,7 @@ export class Jsonizer {
   ): CorrelationSession {
     const session = getOrCreateSession(correlationId, {
       projectName: this.projectName,
-      environment: this.environment,
-      correlationId,
-      component: this.componentName,
+      correlationId,      
     });
 
     session.logs.push({
@@ -34,6 +32,7 @@ export class Jsonizer {
       message: entry.message,
       meta: entry.meta ?? {},
       component: this.componentName,
+      exception:entry.exception
     });
 
     return session;

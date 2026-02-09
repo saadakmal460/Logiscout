@@ -7,9 +7,9 @@ import {
 import { getLogiScouConfig } from "../initiator/state.js";
 import { RequestFormatter } from "../services/formatters/RequestFormatters.js";
 import { RequestLogger } from "../services/Logger/RequestLogger.js";
-import { ServerTransporter } from "../services/transporter/ServerTransporter.js";
+import { serverTransporter } from "../services/transporter/ServerTransporter.js";
 
-const serverTransporter = new ServerTransporter();
+// const serverTransporter = new ServerTransporter();
 const requestLogger = new RequestLogger();
 
 export function createCorrelationMiddleware() {
@@ -25,7 +25,6 @@ export function createCorrelationMiddleware() {
     RequestContext.run(() => {
       const session = getOrCreateSession(correlationId, {
         projectName: getLogiScouConfig().projectName,
-        environment: getLogiScouConfig().environment,
         correlationId,
         request: request,
       });

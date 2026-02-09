@@ -7,11 +7,10 @@ import { LogBatcher } from "../batcher/Batcher.js";
 
 type AnySession = CorrelationSession | NonCorrelationSession;
 
-export class ServerTransporter {
+class ServerTransporter {
   private batcher = new LogBatcher();
 
   transport(session: AnySession): void {
-
     if (this.isFrontendSession(session)) {
       this.batcher.add({
         type: LogPayloadType.SINGLE,
@@ -31,3 +30,5 @@ export class ServerTransporter {
     return session.correlationId === "no-correlation-id";
   }
 }
+
+export const serverTransporter = new ServerTransporter();
