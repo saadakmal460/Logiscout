@@ -7,20 +7,20 @@ export class ConsoleFormatter {
     level: LogLevels;
     message: string;
     timestamp: string;
-    component?: string;
+    logger?: string;
     meta?: Record<string, unknown>;
     exception?: unknown;
   }): string {
-    const { level, message, timestamp, component, meta, exception } = data;
+    const { level, message, timestamp, logger, meta, exception } = data;
 
     const color = LEVEL_COLORS[level] ?? "";
     const levelLabel = `${color}${level.toUpperCase()}${RESET}`;
-    const componentLabel = component ?? "App";
+    const loggerLabel = logger ?? "App";
 
     let output =
       `${timestamp} ` +
       `[${levelLabel}] ` +
-      `[${componentLabel}] ` +
+      `[${loggerLabel}] ` +
       `${message}\n`;
 
     if (meta && Object.keys(meta).length > 0) {

@@ -9,12 +9,12 @@ import { LogEntry } from "../../core/types/LogEntry.js";
 export class Jsonizer {
   private readonly projectName: string;
   private readonly environment: string;
-  private readonly componentName: string;
+  private readonly loggerName: string;
 
   constructor(config: JsonizerConfig) {
     this.projectName = config.projectName;
     this.environment = config.environment;
-    this.componentName = config.componentName;
+    this.loggerName = config.loggerName;
   }
 
   public appendLog(
@@ -22,7 +22,7 @@ export class Jsonizer {
     entry: LogEntry
   ): CorrelationSession {
     const session = getOrCreateSession(correlationId, {
-      projectName: this.projectName,
+      // projectName: this.projectName,
       correlationId,      
     });
 
@@ -31,7 +31,7 @@ export class Jsonizer {
       level: entry.level,
       message: entry.message,
       meta: entry.meta ?? {},
-      component: this.componentName,
+      loggerName: this.loggerName,
       exception:entry.exception
     });
 

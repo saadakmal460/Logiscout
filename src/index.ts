@@ -7,15 +7,15 @@ import { getLogiScouConfig } from "./initiator/state.js";
 import { Levels } from "./services/Levels/Levels.js";
 
 // const Logger = new Levels();
-// export const createLogger = (component: string) =>
-//   new Levels(component);
+// export const createLogger = (logger: string) =>
+//   new Levels(logger);
 
 
 export {initLogiscout} from "./init.js"
-export const createLogger = (component: string) => {
+export const createLogger = (logger: string) => {
   const config = getLogiScouConfig();
 
-  return new Levels(component, {
+  return new Levels(logger, {
     projectName: config.projectName,
     environment: config.environment,
   });

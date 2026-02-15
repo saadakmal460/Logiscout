@@ -24,7 +24,7 @@ export function createCorrelationMiddleware() {
 
     RequestContext.run(() => {
       const session = getOrCreateSession(correlationId, {
-        projectName: getLogiScouConfig().projectName,
+        // projectName: getLogiScouConfig().projectName,
         correlationId,
         request: request,
       });

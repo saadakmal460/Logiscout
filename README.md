@@ -39,7 +39,7 @@ initLogiscout({
 
 ### 2. Create a Logger
 
-Create component-specific loggers:
+Create logger-specific loggers:
 
 ```typescript
 import { createLogger } from 'logiscout';
@@ -114,13 +114,13 @@ Initialize the Logiscout SDK. Must be called before creating any loggers.
 | `environment` | `'dev' \| 'staging' \| 'prod' \| string` | Yes | Current environment |
 | `apiKey` | `string` | No | API key for server transport |
 
-### `createLogger(componentName)`
+### `createLogger(loggerName)`
 
-Create a new logger instance for a specific component.
+Create a new logger instance for a specific logger.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `componentName` | `string` | Yes | Name of the component/service |
+| `loggerName` | `string` | Yes | Name of the logger/service |
 
 Returns a logger instance with the following methods:
 

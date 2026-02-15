@@ -75,7 +75,7 @@ src/
 │   └── GenerateCorrelationId.ts  # Utility to generate correlation IDs
 │
 └── validator/
-    ├── ValidateComponentName.ts  # Validates component name input
+    ├── ValidateloggerName.ts  # Validates logger name input
     ├── ValidateLogEntry.ts       # Validates log entry structure
     ├── ValidateLogLevel.ts       # Validates log level is valid enum
     ├── ValidateLogMessage.ts     # Validates log message is valid string
@@ -440,7 +440,7 @@ The Jsonizer service bridges the Logger and the Correlation Store:
 │            │       level,                            │                  │
 │            │       message,                          │                  │
 │            │       meta,                             │                  │
-│            │       component                         │                  │
+│            │       logger                         │                  │
 │            │     })                                  │                  │
 │            │                                         │                  │
 │            │  3. Return updated session              │                  │
@@ -565,7 +565,7 @@ interface CorrelationSession {
   projectName: string;
   environment: string;
   correlationId: string;
-  component?: string;
+  logger?: string;
   startedAt: string;
   endedAt?: string;
   durationMs?: number;
@@ -579,7 +579,7 @@ interface CorrelationSession {
     level: LogLevels;
     message: string;
     meta?: Record<string, unknown>;
-    component?: string;
+    logger?: string;
   }>;
 }
 ```
@@ -635,8 +635,8 @@ initLogiscout({
   apiKey?: string
 })
 
-// Create component-specific logger
-const logger = createLogger("ComponentName")
+// Create logger-specific logger
+const logger = createLogger("loggerName")
 
 // Log methods
 logger.info(message, meta?, { send?: boolean })

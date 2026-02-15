@@ -2,7 +2,7 @@ import crypto from "crypto";
 
 export function generateCorrelationId(
   projectName: string,
-  componentName: string
+  loggerName: string
 ): string {
-  return `${projectName}-${componentName}-${crypto.randomUUID()}`;
+  return `${projectName}-${loggerName}-${crypto.randomUUID()}`;
 }

@@ -5,7 +5,7 @@ import { RequestContext } from "../../core/context/RequestContext.js";
 import { LogiscoutConfig } from "../../initiator/state.js";
 import { ConsoleTransporter } from "../transporter/ConsoleTranspoter.js";
 import { LOG_LEVEL_SEVERITY } from "../../core/constants/Levels/LevelsSeverity.js";
-import validateComponentName from "../../validator/ValidateComponentName.js";
+import validateloggerName from "../../validator/ValidateLoggerName.js";
 import { throwError } from "../../errors/ThrowError.js";
 import validateLogEntry from "../../validator/ValidateLogEntry.js";
 import validateLogMessage from "../../validator/ValidateLogMessage.js";
@@ -15,22 +15,22 @@ import { serverTransporter } from "../transporter/ServerTransporter.js";
 
 export abstract class Logger {
   protected winstonLogger: WinstonLogger;
-  private componentName: string;
+  private loggerName: string;
   private projectName: string;
   private environment: string;
   private readonly jsonizer: Jsonizer;
   private readonly consoleTransporter:ConsoleTransporter
 
-  constructor(componentName: string, config: LogiscoutConfig) {
-    validateComponentName(componentName);
+  constructor(loggerName: string, config: LogiscoutConfig) {
+    validateloggerName(loggerName);
 
-    this.componentName = componentName;
+    this.loggerName = loggerName;
     this.projectName = config.projectName;
     this.environment = config.environment;
     this.jsonizer = new Jsonizer({
       projectName: this.projectName,
       environment: this.environment,
-      componentName: this.componentName,
+      loggerName: this.loggerName,
     });
     // this.serverTransporter = new ServerTransporter()
     this.consoleTransporter = new ConsoleTransporter()
@@ -58,14 +58,14 @@ export abstract class Logger {
       const correlationId = RequestContext.getCorrelationId() ?? "no-correlation-id";
 
       let logMeta: Record<string, unknown> = {
-        component: this.componentName,
+        logger: this.loggerName,
         correlationId,
         ...(entry.meta ?? {}),
         exception: entry.exception
       };
 
       let consoleMeta: Record<string, unknown> = {
-        component: this.componentName,
+        logger: this.loggerName,
         ...(entry.meta ?? {}),
         exception: entry.exception
       };
@@ -83,7 +83,7 @@ export abstract class Logger {
       const logs = {
         ...entry,
         projectName: this.projectName,
-        component: this.componentName,
+        loggerName: this.loggerName,
         correlationId,
         exception:entry.exception
       };

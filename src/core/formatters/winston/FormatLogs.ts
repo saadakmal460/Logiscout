@@ -6,12 +6,12 @@ const consoleFormatter = new ConsoleFormatter();
 export default function formatLogs() {
     return format.combine(
       format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-      format.printf(({ timestamp, level, message, component, exception, ...meta}) => {
+      format.printf(({ timestamp, level, message, logger, exception, ...meta}) => {
         const formatted = consoleFormatter.format({
           level: level as LogLevels,
           message: String(message),
           timestamp: String(timestamp),
-          component: component as string | undefined,
+          logger: logger as string | undefined,
           meta,
           exception
         });

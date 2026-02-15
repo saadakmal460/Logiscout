@@ -1,7 +1,6 @@
 import { LogLevels } from "../enum/LogLevels.js";
 
 export interface CorrelationSession {
-  projectName: string;
   correlationId: string;
 
   startedAt: string;
@@ -19,18 +18,17 @@ export interface CorrelationSession {
     level: LogLevels;
     message: string;
     meta?: Record<string, unknown>;
-    component: string;
+    loggerName: string;
     exception:unknown
   }>;
 }
 
 export interface NonCorrelationSession {
-  projectName: string;
   timestamp: string;
   level: LogLevels;
   message: string;
   meta?: Record<string, unknown>;
-  component: string;
+  loggerName: string;
   correlationId?:string
   exception:unknown
 }
