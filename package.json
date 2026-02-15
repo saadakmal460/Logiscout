@@ -1,7 +1,7 @@
 {
-  "name": "logiscout",
+  "name": "logiscout-logger",
   "version": "1.0.5",
-  "description": "Logiscout — a structured logger library",
+  "description": "Logiscout-logger — a structured logger library",
   "type": "module",
   "main": "./dist/cjs/index.cjs",
   "module": "./dist/esm/index.js",
