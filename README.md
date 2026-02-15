@@ -1,4 +1,4 @@
-# Logiscout-Logger
+# Logiscout
 
   
 
@@ -42,7 +42,7 @@ A structured logging library for Node.js applications with automatic correlation
 
 ```bash
 
-npm install logiscout-logger
+npm install logiscout
 
 ```
 
@@ -62,7 +62,7 @@ Call once at your application entry point:
 
 ```typescript
 
-import { initLogiscout } from 'logiscout-logger';
+import { initLogiscout } from 'logiscout';
 
   
 
@@ -140,7 +140,7 @@ logger.debug('Cache state', { keys: 42 }, { send: false });
 
 import express from 'express';
 
-import { initLogiscout, createLogger, createCorrelationMiddleware } from 'logiscout-logger';
+import { initLogiscout, createLogger, createCorrelationMiddleware } from 'logiscout';
 
   
 
