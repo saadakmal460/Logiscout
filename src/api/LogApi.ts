@@ -9,9 +9,9 @@ type LogPayload = BackendLogPayload | FrontendLogPayload;
 
 export async function LogApi(data: LogPayload[]): Promise<void> {
   try {
-    console.log(data)
+    // console.log(data)
     const response = await HTTP.post("/ingest", data);
   } catch (error) {
-    // console.error("Failed to send log:", error);
+    console.error("Failed to send log:", error);
   }
 }

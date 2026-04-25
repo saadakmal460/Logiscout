@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // Determine the environment and set base URLs
-const environment = "local";
-console.log("Environment:", environment);
+let environment = "prod";
+// console.log("Environment:", environment);
 
 let IMAGE_BASE_URL = "";
 let APP_URL = "";
@@ -10,7 +10,7 @@ let APP_URL = "";
 if (environment === "local") {
   APP_URL = "http://localhost:3000/";
 } else if (environment === "prod") {
-  APP_URL = "https://practicebackend-uat.thedoclinq.com/api/";
+  APP_URL = "http://47.130.208.43:3000/";
 } else{
   APP_URL = "http://localhost:3000/"
 }
