@@ -1,6 +1,6 @@
 {
   "name": "logiscout",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Logiscout — a structured logger library",
   "type": "module",
   "main": "./dist/cjs/index.cjs",
