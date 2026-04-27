@@ -11,7 +11,7 @@ export async function LogApi(data: LogPayload[]): Promise<void> {
   try {
     const { apiKey } = getLogiScouConfig();
     await HTTP.post("/ingest", data, {
-      headers: apiKey ? { Authorization: apiKey } : undefined,
+      headers: apiKey ? { Authorization: `Bearer ${apiKey}` } : undefined,
     });
   } catch (error) {
     console.error("Failed to send log:", error);
