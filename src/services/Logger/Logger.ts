@@ -12,12 +12,13 @@ import validateLogMessage from "../../validator/ValidateLogMessage.js";
 import validateLogLevel from "../../validator/ValidateLogLevel.js";
 import { Jsonizer } from "../processors/Jsonizer.js";
 import { serverTransporter } from "../transporter/ServerTransporter.js";
+import { Environment } from "../../core/enum/Environment.js";
 
 export abstract class Logger {
   protected winstonLogger: WinstonLogger;
   private loggerName: string;
   private projectName: string;
-  private environment: string;
+  private environment: Environment;
   private readonly jsonizer: Jsonizer;
   private readonly consoleTransporter:ConsoleTransporter
 
@@ -88,7 +89,11 @@ export abstract class Logger {
         exception:entry.exception
       };
 
-      if (entry.send && this.environment == "prod" && correlationId=="no-correlation-id") {
+      if (
+        entry.send &&
+        this.environment === Environment.PRODUCTION &&
+        correlationId === "no-correlation-id"
+      ) {
         // console.log("sending to he server")
         serverTransporter.transport(logs);
       }

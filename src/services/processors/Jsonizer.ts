@@ -2,13 +2,14 @@ import { CorrelationSession } from "../../core/interface/CorrelationSession.js";
 import { JsonizerConfig } from "../../core/interface/JsonzierConfig.js";
 import { getOrCreateSession } from "../../core/store/CorrelationStore.js";
 import { LogEntry } from "../../core/types/LogEntry.js";
+import { Environment } from "../../core/enum/Environment.js";
 
 
 
 
 export class Jsonizer {
   private readonly projectName: string;
-  private readonly environment: string;
+  private readonly environment: Environment;
   private readonly loggerName: string;
 
   constructor(config: JsonizerConfig) {

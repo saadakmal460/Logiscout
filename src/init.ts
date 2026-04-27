@@ -1,5 +1,5 @@
 import { LogiscoutConfig, setConfig } from "./initiator/state.js";
-
+import { Environment } from "./core/enum/Environment.js";
 
 
 export function initLogiscout(config: LogiscoutConfig) {
@@ -7,8 +7,10 @@ export function initLogiscout(config: LogiscoutConfig) {
     throw new Error("projectName is required");
   }
 
-  if (!config.environment) {
-    throw new Error("environment is required");
+  if (!Object.values(Environment).includes(config.environment)) {
+    throw new Error(
+      `environment must be one of: ${Object.values(Environment).join(", ")}`
+    );
   }
 
   setConfig(config);

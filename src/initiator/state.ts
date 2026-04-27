@@ -1,6 +1,8 @@
+import { Environment } from "../core/enum/Environment.js";
+
 export type LogiscoutConfig = {
   projectName: string;
-  environment: "dev" | "staging" | "prod" | string;
+  environment: Environment;
   apiKey?: string;
 };
 

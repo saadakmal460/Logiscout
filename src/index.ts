@@ -1,4 +1,5 @@
 export { LogLevels } from "./core/enum/LogLevels.js";
+export { Environment } from "./core/enum/Environment.js";
 export { LoggerInterface } from "./core/interface/LoggerInterface.js";
 export { LogEntry } from "./core/types/LogEntry.js";
 export { Levels } from "./services/Levels/Levels.js";
